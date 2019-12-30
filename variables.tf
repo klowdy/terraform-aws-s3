@@ -100,6 +100,7 @@ variable "lifecycle_rules" {
   default = []
 }
 
+
 #~~~~~~~~~~~~~~~~~~~~~~
 # Public Access Block
 #~~~~~~~~~~~~~~~~~~~~~~
