@@ -68,9 +68,9 @@ resource "aws_s3_bucket" "this" {
     for_each = var.static_website_config
 
     content {
-      index_document           = website.value.index_document
-      error_document           = website.value.error_document
-      routing_rules            = website.value.routing_rules
+      index_document = website.value.index_document
+      error_document = website.value.error_document
+      routing_rules  = website.value.routing_rules
     }
   }
 

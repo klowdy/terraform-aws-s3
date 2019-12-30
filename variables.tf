@@ -10,7 +10,7 @@ variable "create" {
 variable "grant_owner_access" {
   description = "When set to true, this will create a bucket policy that gives the bucket owner admin access"
   type        = bool
-  default     = false
+  default     = true
 }
 
 variable "force_destroy" {
@@ -72,6 +72,7 @@ variable "sse_config" {
   type        = list(object({
     sse_key = string
   }))
+  default = []
 }
 
 #~~~~~~~~~~~~~
@@ -87,6 +88,31 @@ variable "versioning_config" {
     enabled    = false
     mfa_delete = false
   }
+}
+
+#~~~~~~~~~~~~~~~~~~~~~~~~~
+# Static Website Hosting
+#~~~~~~~~~~~~~~~~~~~~~~~~~
+variable "static_website_config" {
+  description = "A data structure that configures the bucket to host a static website"
+  type        = list(object({
+    index_document           = string
+    error_document           = string
+    routing_rules            = string
+  }))
+  default = []
+}
+
+variable "cors_rules" {
+  description = "A data structure that configures CORS rules"
+  type        = list(object({
+    allowed_headers = list(string)
+    allowed_methods = list(string)
+    allowed_origins = list(string)
+    expose_headers  = list(string)
+    max_age_seconds = number
+  }))
+  default = []
 }
 
 #~~~~~~~~~~~~~~~~~~
@@ -109,25 +135,6 @@ variable "lifecycle_rules" {
     noncurrent_version_transitions = list(object({
       days          = number
       storage_class = string
-    }))
-  }))
-  default = []
-}
-
-variable "replication_configurations" {
-  description = "A data structure to create a replication configuration block"
-  type        = list(object({
-    role = string
-    rules = list(object({
-      id       = string
-      priority = number
-      prefix   = string
-      status   = string
-      destination = object({
-        bucket_arn    = string
-        account_id    = string
-        storage_class = string
-      })
     }))
   }))
   default = []
