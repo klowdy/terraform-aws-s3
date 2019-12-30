@@ -1,5 +1,5 @@
 resource "aws_s3_bucket_policy" "custom" {
-  count  = var.create && !var.grant_owner_access ? 1 : 0
+  count  = var.create && !var.grant_owner_access && length(var.policy_document) > 0 ? 1 : 0
   bucket = aws_s3_bucket.this[0].id
   policy = var.policy_document
 
