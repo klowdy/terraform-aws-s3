@@ -64,34 +64,6 @@ resource "aws_s3_bucket" "this" {
     }
   }
 
-  dynamic "replication_configuration" {
-    for_each = var.replication_configurations
-
-    content {
-      role = replication_configuration.value.role
-
-      dynamic "rules" {
-        for_each = replication_configuration.value.rules
-
-        content {
-          id       = rules.value.id
-          priority = rules.value.priority
-          prefix   = rules.value.prefix
-          status   = rules.value.status
-          destination {
-            bucket             = rules.value.destination.bucket_arn
-            account_id         = rules.value.destination.account_id
-            storage_class      = rules.value.destination.storage_class
-            #replica_kms_key_id = rules.value.destination.replica_kms_key_id
-            access_control_translation {
-              owner = "Destination"
-            }
-          }
-        }
-      }
-    }
-  }
-
   tags = merge(
     {
       "Name" = format("%s", var.name)

@@ -100,25 +100,6 @@ variable "lifecycle_rules" {
   default = []
 }
 
-variable "replication_configurations" {
-  description = "A data structure to create a replication configuration block"
-  type        = list(object({
-    role = string
-    rules = list(object({
-      id       = string
-      priority = number
-      prefix   = string
-      status   = string
-      destination = object({
-        bucket_arn    = string
-        account_id    = string
-        storage_class = string
-      })
-    }))
-  }))
-  default = []
-}
-
 #~~~~~~~~~~~~~~~~~~~~~~
 # Public Access Block
 #~~~~~~~~~~~~~~~~~~~~~~
