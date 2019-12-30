@@ -10,7 +10,7 @@ variable "create" {
 variable "grant_owner_access" {
   description = "When set to true, this will create a bucket policy that gives the bucket owner admin access"
   type        = bool
-  default     = true
+  default     = false
 }
 
 variable "force_destroy" {
