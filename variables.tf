@@ -7,6 +7,12 @@ variable "create" {
   default     = false
 }
 
+variable "grant_owner_access" {
+  description = "When set to true, this will create a bucket policy that gives the bucket owner admin access"
+  type        = bool
+  default     = false
+}
+
 variable "force_destroy" {
   description = "When set to true, will delete the bucket even if it is not empty"
   type        = bool
@@ -40,14 +46,22 @@ variable "acl" {
   default     = "private"
 }
 
-variable "acceleration_status" {
-  description = "Sets the accelerate configuration of an existing bucket. Can be Enabled or Suspended"
-  default     = "Suspended"
-}
-
 variable "request_payer" {
   description = "Specifies who should bear the cost of Amazon S3 data transfer. Can be either BucketOwner or Requester"
   default     = "BucketOwner"
+}
+
+#~~~~~~~~~~~~~~~~
+# Bucket Policy
+#~~~~~~~~~~~~~~~~
+variable "account_id" {
+  description = "The AWS Account ID of the bucket owner.  Required when grant_owner_access is set to true"
+  default     = ""
+}
+
+variable "policy_document" {
+  description = "A JSON string containing a bucket policy which will be applied to the bucket"
+  default     = ""
 }
 
 #~~~~~~~~~~~~

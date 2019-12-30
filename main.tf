@@ -5,7 +5,7 @@ resource "aws_s3_bucket" "this" {
 
   acl                 = var.acl
   force_destroy       = var.force_destroy
-  acceleration_status = var.acceleration_status
+  #acceleration_status = var.acceleration_status
   region              = var.region
   request_payer       = var.request_payer
   
@@ -41,7 +41,7 @@ resource "aws_s3_bucket" "this" {
       }
 
       noncurrent_version_expiration {
-        days = lifecycle_rule.value.noncurrent_version_expiration
+        days = lifecycle_rule.value.noncurrent_version_expiration_days
       }
 
       dynamic "transition" {
@@ -64,31 +64,25 @@ resource "aws_s3_bucket" "this" {
     }
   }
 
-  dynamic "replication_configuration" {
-    for_each = var.replication_configurations
+  dynamic "website" {
+    for_each = var.static_website_config
 
     content {
-      role = replication_configuration.value.role
+      index_document           = website.value.index_document
+      error_document           = website.value.error_document
+      routing_rules            = website.value.routing_rules
+    }
+  }
 
-      dynamic "rules" {
-        for_each = replication_configuration.value.rules
+  dynamic "cors_rule" {
+    for_each = var.cors_rules
 
-        content {
-          id       = rules.value.id
-          priority = rules.value.priority
-          prefix   = rules.value.prefix
-          status   = rules.value.status
-          destination {
-            bucket             = rules.value.destination.bucket_arn
-            account_id         = rules.value.destination.account_id
-            storage_class      = rules.value.destination.storage_class
-            #replica_kms_key_id = rules.value.destination.replica_kms_key_id
-            access_control_translation {
-              owner = "Destination"
-            }
-          }
-        }
-      }
+    content {
+      allowed_headers = cors_rule.value.allowed_headers
+      allowed_methods = cors_rule.value.allowed_methods
+      allowed_origins = cors_rule.value.allowed_origins
+      expose_headers  = cors_rule.value.expose_headers
+      max_age_seconds = cors_rule.value.max_age_seconds
     }
   }
 
@@ -110,6 +104,5 @@ resource "aws_s3_bucket_public_access_block" "this" {
   ignore_public_acls      = var.ignore_public_acls
   restrict_public_buckets = var.restrict_public_buckets
 
-  #depends_on = [aws_s3_bucket.this, aws_s3_bucket_policy.custom, aws_s3_bucket_policy.default]
-  depends_on = [aws_s3_bucket.this]
+  depends_on = [aws_s3_bucket.this, aws_s3_bucket_policy.custom, aws_s3_bucket_policy.owner]
 }
