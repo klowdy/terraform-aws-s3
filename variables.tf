@@ -126,13 +126,18 @@ variable "lifecycle_rules" {
     tags                                   = map(string)
     enabled                                = bool
     abort_incomplete_multipart_upload_days = number
-    expiration_days                        = number
-    noncurrent_version_expiration_days     = number
-    transitions = list(object({
+    expiration_config = list(object({
+      days = number
+      expired_object_delete_marker = bool
+    }))
+    noncurrent_version_expiration_config = list(object({
+      days = number
+    }))
+    transitions_config = list(object({
       days          = number
       storage_class = string
     }))
-    noncurrent_version_transitions = list(object({
+    noncurrent_version_transitions_config = list(object({
       days          = number
       storage_class = string
     }))
@@ -143,6 +148,12 @@ variable "lifecycle_rules" {
 #~~~~~~~~~~~~~~~~~~~~~~
 # Public Access Block
 #~~~~~~~~~~~~~~~~~~~~~~
+variable "remove_public_access_block" {
+  description = "When set to true, will disable all public access block attributes"
+  type        = bool
+  default     = false
+}
+
 variable "block_public_acls" {
   description = "Whether Amazon S3 should block public ACLs for this bucket"
   type        = bool
