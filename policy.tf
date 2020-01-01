@@ -14,6 +14,11 @@ resource "aws_s3_bucket_policy" "owner" {
   depends_on = [aws_s3_bucket.this]
 }
 
+#~~~~~~~~~~~~~~~~~~~~~~
+# Bucket owner policy
+#~~~~~~~~~~~~~~~~~~~~~~
+data "aws_caller_identity" "caller" {}
+
 data "aws_iam_policy_document" "owner" {
   count = var.create && var.grant_owner_access ? 1 : 0
 
@@ -24,7 +29,7 @@ data "aws_iam_policy_document" "owner" {
 
     principals {
       type        = "AWS"
-      identifiers = ["arn:aws:iam::${var.account_id}:root"]
+      identifiers = ["arn:aws:iam::${data.aws_caller_identity.caller.account_id}:root"]
     }
 
     actions = ["s3:*"]

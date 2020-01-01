@@ -54,11 +54,6 @@ variable "request_payer" {
 #~~~~~~~~~~~~~~~~
 # Bucket Policy
 #~~~~~~~~~~~~~~~~
-variable "account_id" {
-  description = "The AWS Account ID of the bucket owner.  Required when grant_owner_access is set to true"
-  default     = ""
-}
-
 variable "policy_document" {
   description = "A JSON string containing a bucket policy which will be applied to the bucket"
   default     = ""
@@ -80,14 +75,8 @@ variable "sse_config" {
 #~~~~~~~~~~~~~
 variable "versioning_config" {
   description  = "Configure versioning on bucket object.  Once you version-enable a bucket, it can never return to an unversioned state. You can, however, suspend versioning on that bucket"
-  type         = object({
-    enabled    = bool
-    mfa_delete = bool
-  })
-  default      = {
-    enabled    = false
-    mfa_delete = false
-  }
+  type = list(map(string))
+  default = []
 }
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~
