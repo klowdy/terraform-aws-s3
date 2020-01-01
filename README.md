@@ -18,23 +18,24 @@
 
 Since optional Object attributes are not yet available as a feature within Terraform the implementation of `lifecycle_rules` is unduly verbose.  When [issue #19898](https://github.com/hashicorp/terraform/issues/19898) is resolved, this will be cleaned up
 
+## Defaults
+
+Unless otherwise specified, this module will create a bucket with the following:
+
+- Public access block
+- `private `Canned ACL
+- Bucket policy which grants the account owner admin access
+
 ## Basic Implementation
 
-The following creates an S3 bucket with:
-- SSE  using the KMS S3 key
-- A bucket policy allowing the specified `account_id` admin access
+The following is the most basic implementation for this module
 
 ```hcl
 module "s3_basic" {
   source = "klowdy/s3/aws"
   
-  create             = true
-  grant_owner_access = true
-
-  name       = "unique-bucket-name"
-  account_id = "123456789012"
-
-  sse_config = [{sse_key = "S3"}]
+  create = true
+  name   = "unique-bucket-name"
 }
 ```
 ## Examples

@@ -1,14 +1,22 @@
 module "s3_versioning" {
   source = "../../"
   
-  create             = true
-  grant_owner_access = true
+  create = true
+  name   = "unique-bucket-name-versioning"
 
-  name       = "unique-bucket-name-versioning"
-  account_id = "123456789012"
-
-  versioning_config = {
+  versioning_config = [{
     enabled    = true
-    mfa_delete = false
-  }
+  }]
+}
+
+module "s3_versioning_mfa_delete" {
+  source = "../../"
+  
+  create = true
+  name   = "unique-bucket-name-versioning"
+
+  versioning_config = [{
+    enabled    = true
+    mfa_delete = true
+  }]
 }

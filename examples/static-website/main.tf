@@ -2,12 +2,12 @@ module "s3_static_website" {
   source = "../../"
   
   create                     = true
-  grant_owner_access         = true
   remove_public_access_block = true
 
   name       = "s3-website-test.mydomain.com"
-  account_id = "123456789012"
   acl        = "public-read"
+
+  policy_document = concat(data.aws_iam_policy_document.public_read.*.json, [""])[0]
 
   static_website_config = [
     {
@@ -25,8 +25,6 @@ module "s3_static_website" {
 EOF
     }
   ]
-  
-  policy_document = concat(data.aws_iam_policy_document.public_read.*.json, [""])[0]
 }
 
 data "aws_iam_policy_document" "public_read" {

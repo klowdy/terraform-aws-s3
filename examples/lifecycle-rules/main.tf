@@ -1,16 +1,12 @@
 module "s3_lifecycle_rules" {
   source = "../../"
   
-  create             = true
-  grant_owner_access = true
+  create = true
+  name   = "unique-bucket-name-lifecycle-rules"
 
-  name       = "unique-bucket-name-lifecycle-rules"
-  account_id = "123456789012"
-
-  versioning_config = {
+  versioning_config = [{
     enabled    = true
-    mfa_delete = false
-  }
+  }]
 
   lifecycle_rules = [
     {

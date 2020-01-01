@@ -4,13 +4,12 @@
 module "s3_kms" {
   source = "../../"
   
-  create             = true
-  grant_owner_access = true
+  create = true
+  name   = "unique-bucket-name-kms"
 
-  name       = "unique-bucket-name-kms"
-  account_id = "123456789012"
-
-  sse_config = [{sse_key = "S3"}]
+  sse_config = [{
+    sse_key = "S3"
+  }]
 }
 
 #~~~~~~~~~~~~~~~~
@@ -24,15 +23,10 @@ resource "aws_kms_key" "s3" {
 module "s3_kms_cmk" {
   source = "../../"
   
-  create             = true
-  grant_owner_access = true
+  create = true
+  name   = "unique-bucket-name-cmk"
 
-  name       = "unique-bucket-name-cmk"
-  account_id = "123456789012"
-
-  sse_config = [
-    {
-      sse_key = concat(aws_kms_key.s3.*.id,[""])[0]
-    }
-  ]
+  sse_config = [{
+    sse_key = concat(aws_kms_key.s3.*.id,[""])[0]
+  }]
 }
