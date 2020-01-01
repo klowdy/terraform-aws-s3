@@ -22,9 +22,13 @@ resource "aws_s3_bucket" "this" {
     }
   }
 
-  versioning {
-    enabled    = var.versioning_config.enabled
-    mfa_delete = var.versioning_config.mfa_delete
+  dynamic "versioning" {
+    for_each = var.versioning_config
+
+    content {
+      enabled    = lookup(versioning.value, "enabled", false)
+      mfa_delete = lookup(versioning.value, "mfa_delete", false)
+    }
   }
 
   dynamic "lifecycle_rule" {
@@ -79,9 +83,10 @@ resource "aws_s3_bucket" "this" {
     for_each = var.static_website_config
 
     content {
-      index_document = website.value.index_document
-      error_document = website.value.error_document
-      routing_rules  = website.value.routing_rules
+      index_document           = lookup(website.value, "index_document", null)
+      error_document           = lookup(website.value, "error_document", null)
+      redirect_all_requests_to = lookup(website.value, "redirect_all_requests_to", null)
+      routing_rules            = lookup(website.value, "routing_rules", null)
     }
   }
 

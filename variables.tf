@@ -74,9 +74,9 @@ variable "sse_config" {
 # Versioning
 #~~~~~~~~~~~~~
 variable "versioning_config" {
-  description  = "Configure versioning on bucket object.  Once you version-enable a bucket, it can never return to an unversioned state. You can, however, suspend versioning on that bucket"
-  type = list(map(string))
-  default = []
+  description = "Configure versioning on bucket object.  Once you version-enable a bucket, it can never return to an unversioned state. You can, however, suspend versioning on that bucket"
+  type        = list(map(string))
+  default     = []
 }
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -84,12 +84,8 @@ variable "versioning_config" {
 #~~~~~~~~~~~~~~~~~~~~~~~~~
 variable "static_website_config" {
   description = "A data structure that configures the bucket to host a static website"
-  type        = list(object({
-    index_document           = string
-    error_document           = string
-    routing_rules            = string
-  }))
-  default = []
+  type        = list(map(string))
+  default     = []
 }
 
 variable "cors_rules" {
